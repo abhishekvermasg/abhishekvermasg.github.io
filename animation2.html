@@ -1,5 +1,6 @@
 <html>
 <head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.4.4/randomColor.js"></script>
 	<style>
 		* {
 			margin: 0;
@@ -42,20 +43,10 @@
 					var y = Math.floor(Math.random() * 10000) % canvas.height;
 					var rad = Math.floor(Math.random() * 10000) % 15;
 					
-					var r = Math.floor(Math.random() * 255) % 255;
-					var g = Math.floor(Math.random() * 255) % 255;
-					var b = Math.floor(Math.random() * 255) % 255;
-					
-					var a = Math.random();
-					
 					var obj  = {
 						xpos: x,
 						ypos: y,
-						radius: rad,
-						red: r,
-						green: g,
-						blue: b,
-						alpha: a
+						radius: rad
 					};	
 
 					circles.push(obj);
@@ -66,14 +57,14 @@
 		function draw(c) {
 			ctx.beginPath();
 			ctx.arc(c.xpos,c.ypos,c.radius,0,2*Math.PI);
-			ctx.fillStyle = "rgba("+c.red+","+c.green+","+c.blue+","+c.alpha+")";
+			ctx.fillStyle = randomColor({format: 'rgba'});
 			ctx.fill();		
 		}
 
 		function draw_stroke(c) {	
 			ctx.beginPath();
 			ctx.arc(c.xpos,c.ypos,c.radius,0,2*Math.PI);
-			ctx.strokeStyle = "rgba("+c.red+","+c.green+","+c.blue+","+c.alpha+")";
+			ctx.strokeStyle = randomColor({format: 'rgba'});;
 			ctx.stroke();
 		}
 
@@ -89,20 +80,6 @@
 			return null;
 		}
 
-		function getRandomColor() {
-			r = Math.floor(Math.random() * 255) % 255;
-			g = Math.floor(Math.random() * 255) % 255;
-			b = Math.floor(Math.random() * 255) % 255;
-			a = Math.random();
-			var c = {
-				r: r,
-				g: g,
-				b: b,
-				a: a
-			};
-			return c;
-		}
-
 		function changeBackground() {
 			var keyframes = findKeyframesRule('example');
 			var keyframeString = [];  
@@ -112,15 +89,11 @@
 			for (var i = 0, j = keyframeString.length; i < j; i ++) {
 	  			keyframes.deleteRule(keyframeString[i]);
 			}
-			console.log(keyframes.cssRules.length);
-			var col = getRandomColor();
-			keyframes.appendRule("0% {background-color: rgba("+col.r+","+col.g+","+col.b+","+col.a+");}");
-			col = getRandomColor();
-			keyframes.appendRule("25% {background-color: rgba("+col.r+","+col.g+","+col.b+","+col.a+");}");
-			col = getRandomColor();
-			keyframes.appendRule("50% {background-color: rgba("+col.r+","+col.g+","+col.b+","+col.a+");}");
-			col = getRandomColor();
-			keyframes.appendRule("100% {background-color: rgba("+col.r+","+col.g+","+col.b+","+col.a+");}");
+			// console.log(keyframes.cssRules.length);
+			keyframes.appendRule("0% {background-color: "+randomColor({format: 'rgba'})+"}");
+			keyframes.appendRule("25% {background-color: "+randomColor({format: 'rgba'})+"}");
+			keyframes.appendRule("50% {background-color: "+randomColor({format: 'rgba'})+"}");
+			keyframes.appendRule("100% {background-color: "+randomColor({format: 'rgba'})+"}");
 		}
 
 		function init() {
@@ -150,9 +123,8 @@
 				ctx.fillText(msg,150,50);
 			}
 		}
-
 		setInterval(init, 1);
-		var time = setInterval(changeBackground, 5000);
+		var time = setInterval(changeBackground, 10000);
 	</script> 
 </body>
 </html>
