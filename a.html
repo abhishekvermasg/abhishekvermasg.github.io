@@ -1,0 +1,158 @@
+<html>
+<head>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		@keyframes example {
+		    0%   {background-color: black;}
+		    25%  {background-color: blueviolet;}
+		    50%  {background-color: yellow;}
+		    100% {background-color: white;}
+		}
+
+		#canvas {
+			animation: example 10s ease-in-out infinite alternate;
+		}
+	</style>
+	<title>Just Something</title>
+</head>
+<body onload="init();">
+	<canvas id="canvas"></canvas>
+	<div>asdlkfajd</div>
+	<script>
+		
+		circles = [];
+
+		var c = document.getElementById("canvas");
+		canvas.height = window.innerHeight;
+		canvas.width = window.innerWidth;
+		var ctx = c.getContext("2d");
+
+		function populate() {
+			if (circles.length) {
+				for (var i = 0; i < circles.length; i++) {
+					circles[i].ypos -= 1;
+				}
+			} else {
+				for (var i = 0; i < 1000; i++) {
+					var x = Math.floor(Math.random() * 10000) % canvas.width;
+					var y = Math.floor(Math.random() * 10000) % canvas.height;
+					var rad = Math.floor(Math.random() * 10000) % 15;
+					
+					var r = Math.floor(Math.random() * 255) % 255;
+					var g = Math.floor(Math.random() * 255) % 255;
+					var b = Math.floor(Math.random() * 255) % 255;
+					
+					var a = Math.random();
+					
+					var obj  = {
+						xpos: x,
+						ypos: y,
+						radius: rad,
+						red: r,
+						green: g,
+						blue: b,
+						alpha: a
+					};	
+
+					circles.push(obj);
+				}
+			}		
+		}
+
+		function draw(c) {
+			ctx.beginPath();
+			ctx.arc(c.xpos,c.ypos,c.radius,0,2*Math.PI);
+			ctx.fillStyle = "rgba("+c.red+","+c.green+","+c.blue+","+c.alpha+")";
+			ctx.fill();		
+		}
+
+		function draw_stroke(c) {	
+			ctx.beginPath();
+			ctx.arc(c.xpos,c.ypos,c.radius,0,2*Math.PI);
+			ctx.strokeStyle = "rgba("+c.red+","+c.green+","+c.blue+","+c.alpha+")";
+			ctx.stroke();
+		}
+
+		function findKeyframesRule(rule) {
+		  	var ss = document.styleSheets;
+		  	for (var i = 0; i < ss.length; ++i) {
+		    	for (var j = 0; j < ss[i].cssRules.length; ++j) {
+      				if (ss[i].cssRules[j].type == window.CSSRule.WEBKIT_KEYFRAMES_RULE && ss[i].cssRules[j].name == rule) { 
+        				return ss[i].cssRules[j]; 
+        			}
+    			}
+			}
+			return null;
+		}
+
+		function getRandomColor() {
+			r = Math.floor(Math.random() * 255) % 255;
+			g = Math.floor(Math.random() * 255) % 255;
+			b = Math.floor(Math.random() * 255) % 255;
+			a = Math.random();
+			var c = {
+				r: r,
+				g: g,
+				b: b,
+				a: a
+			};
+			return c;
+		}
+
+		function changeBackground() {
+			var keyframes = findKeyframesRule('example');
+			var keyframeString = [];  
+			for(var i = 0; i < keyframes.cssRules.length; i++) {
+			  keyframeString.push(keyframes[i].keyText); 
+			}
+			for (var i = 0, j = keyframeString.length; i < j; i ++) {
+	  			keyframes.deleteRule(keyframeString[i]);
+			}
+			console.log(keyframes.cssRules.length);
+			var col = getRandomColor();
+			keyframes.appendRule("0% {background-color: rgba("+col.r+","+col.g+","+col.b+","+col.a+");}");
+			col = getRandomColor();
+			keyframes.appendRule("25% {background-color: rgba("+col.r+","+col.g+","+col.b+","+col.a+");}");
+			col = getRandomColor();
+			keyframes.appendRule("50% {background-color: rgba("+col.r+","+col.g+","+col.b+","+col.a+");}");
+			col = getRandomColor();
+			keyframes.appendRule("100% {background-color: rgba("+col.r+","+col.g+","+col.b+","+col.a+");}");
+		}
+
+		function init() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			populate();
+			var all_zero = 1;
+			for (var i = 0; i < circles.length; i++) {
+				draw(circles[i]);
+				if (circles[i].ypos > 0) all_zero = 0;
+			}
+			if (all_zero) {
+				clearInterval(time);
+				var keyframes = findKeyframesRule('example');
+				var keyframeString = [];  
+				for(var i = 0; i < keyframes.cssRules.length; i++) {
+				  keyframeString.push(keyframes[i].keyText); 
+				}
+				for (var i = 0, j = keyframeString.length; i < j; i ++) {
+		  			keyframes.deleteRule(keyframeString[i]);
+				}
+				console.log('hike');
+				ctx.font = "bold 30px Arial";
+				var msg = "Animation ended. Refresh to restart the animation.";
+				ctx.textAlign = "start";
+				ctx.textBaseline = "bottom";
+				ctx.fillStyle = "#000000"; 
+				ctx.fillText(msg,150,50);
+			}
+		}
+
+		setInterval(init, 1);
+		var time = setInterval(changeBackground, 5000);
+	</script> 
+</body>
+</html>
