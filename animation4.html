@@ -15,6 +15,9 @@
 
 		#canvas {
 			animation: example 10s ease-in-out infinite alternate;
+			-webkit-transform3d: translate(0,0,0);
+			-moz-transform3d: translate(0,0,0);
+			transform3d: translate(0,0,0);
 		}
 	</style>
 	<title>Just Something</title>
@@ -33,7 +36,7 @@
 		function getCircle() {
 			var x = Math.floor(Math.random() * 10000) % canvas.width;
 			var y = Math.floor(Math.random() * 10000) % canvas.height;
-			var rad = Math.floor(Math.random() * 10000) % 30;
+			var rad = Math.floor(Math.random() * 10000) % 20;
 			
 			var obj  = {
 				xpos: x,
@@ -59,7 +62,7 @@
 
 		function populate(counter) {
 			
-			for (var i = 0; i < 200; i++) {
+			for (var i = 0; i < 500; i++) {
 				while (1) {
 					circ = getCircle();
 					var touch = 1;
