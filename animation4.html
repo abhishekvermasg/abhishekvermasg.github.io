@@ -183,7 +183,7 @@
 			ctx.fill();
 			ctx.closePath();
 
-			if (init.counter > canvas.height / 3) {
+			if (init.counter > (2 * canvas.height) / 7) {
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				clearInterval(time);
 				clearInterval(setter);
