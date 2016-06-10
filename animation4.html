@@ -33,7 +33,7 @@
 		function getCircle() {
 			var x = Math.floor(Math.random() * 10000) % canvas.width;
 			var y = Math.floor(Math.random() * 10000) % canvas.height;
-			var rad = Math.floor(Math.random() * 10000) % 20;
+			var rad = Math.floor(Math.random() * 10000) % 30;
 			
 			var obj  = {
 				xpos: x,
@@ -59,7 +59,7 @@
 
 		function populate(counter) {
 			
-			for (var i = 0; i < 500; i++) {
+			for (var i = 0; i < 200; i++) {
 				while (1) {
 					circ = getCircle();
 					var touch = 1;
