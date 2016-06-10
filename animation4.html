@@ -87,7 +87,20 @@
 			return str;
 		}
 
+		function getRandomColorAlpha() {
+			var r = Math.floor(Math.random() * 255) % 255;
+			var g = Math.floor(Math.random() * 255) % 255;
+			var b = Math.floor(Math.random() * 255) % 255;
+			var a = 0.3;
+			var str = "rgba("+r+","+g+","+b+","+a+")";
+			return str;
+		}
+
 		function draw(c) {
+			ctx.beginPath();
+			ctx.arc(c.xpos, c.ypos, c.radius + Math.floor(0.25*c.radius), 0, 2 * Math.PI);
+			ctx.fillStyle = getRandomColorAlpha();
+			ctx.fill();
 			ctx.beginPath();
 			ctx.arc(c.xpos,c.ypos,c.radius,0,2*Math.PI);
 			ctx.fillStyle = getRandomColor();
@@ -150,9 +163,7 @@
 		function init() {
 			if ( typeof init.counter == 'undefined' ) {
 		        	init.counter = 0;
-		    	}
-			ctx.shadowBlur=10;
-			ctx.shadowColor="black";
+		    }
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			circles = [];
 			populate(init.counter);
@@ -183,7 +194,7 @@
 			ctx.fill();
 			ctx.closePath();
 
-			if (init.counter > (3 * canvas.height) / 7) {
+			if (init.counter > Math.floor((25 * canvas.height) / 70)) {
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				clearInterval(time);
 				clearInterval(setter);
@@ -205,7 +216,7 @@
 			++init.counter;
 		}
 
-		var setter = setInterval(init, 1);
+		var setter = setInterval(init, 90);
 		var time = setInterval(changeBackground, 10000);
 	
 	</script> 
