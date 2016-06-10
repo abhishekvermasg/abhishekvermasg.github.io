@@ -149,8 +149,8 @@
 
 		function init() {
 			if ( typeof init.counter == 'undefined' ) {
-		        init.counter = 0;
-		    }
+		        	init.counter = 0;
+		    	}
 			ctx.shadowBlur=10;
 			ctx.shadowColor="black";
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -195,7 +195,6 @@
 				for (var i = 0, j = keyframeString.length; i < j; i ++) {
 		  			keyframes.deleteRule(keyframeString[i]);
 				}
-				// console.log('hike');
 				ctx.font = "bold 30px Arial";
 				var msg = "Animation ended. Refresh to restart the animation.";
 				ctx.textAlign = "start";
