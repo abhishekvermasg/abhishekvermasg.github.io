@@ -18,12 +18,20 @@
           margin: 1%;
           width: 10%;
         }
+        a span {
+          display:inline;
+          display:inline-table;
+          display:inline-block;
+          vertical-align:middle;
+          line-height: 20px;
+          *margin-top: expression(this.offsetHeight < this.parentNode.offsetHeight ? parseInt((this.parentNode.offsetHeight - this.offsetHeight) / 2) + "px" : "0");
+        }
       </style>
   </head>
   <body>
-    <a href="animation.html">Animation 1</a>
-    <a href="animation2.html">Animation 2</a>
-    <a href="animation3.html">Animation 3</a>
-    <a href="animation4.html">Animation 4</a>
+    <a href="animation.html"><span>Animation 1</span></a>
+    <a href="animation2.html"><span>Animation 2</span></a>
+    <a href="animation3.html"><span>Animation 3</span></a>
+    <a href="animation4.html"><span>Animation 4</span></a>
   </body>
 </html>
