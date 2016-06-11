@@ -6,15 +6,34 @@
 			margin: 0;
 			padding: 0;
 		}
-
+		@-webkit-keyframes example {
+		    0%   {background-color: black;}
+		    25%  {background-color: blueviolet;}
+		    50%  {background-color: yellow;}
+		    100% {background-color: white;}
+		}
+		@-moz-keyframes example {
+		    0%   {background-color: black;}
+		    25%  {background-color: blueviolet;}
+		    50%  {background-color: yellow;}
+		    100% {background-color: white;}
+		}
+		@-o-keyframes example {
+		    0%   {background-color: black;}
+		    25%  {background-color: blueviolet;}
+		    50%  {background-color: yellow;}
+		    100% {background-color: white;}
+		}
 		@keyframes example {
 		    0%   {background-color: black;}
 		    25%  {background-color: blueviolet;}
 		    50%  {background-color: yellow;}
 		    100% {background-color: white;}
 		}
-
 		#canvas {
+			-webkit-animation: example 10s ease-in-out infinite alternate;
+			-moz-animation: example 10s ease-in-out infinite alternate;
+			-o-animation: example 10s ease-in-out infinite alternate;
 			animation: example 10s ease-in-out infinite alternate;
 		}
 	</style>
