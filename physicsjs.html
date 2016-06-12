@@ -79,11 +79,11 @@
 				Physics.behavior('body-impulse-response'), Physics.behavior('body-collision-detection'), Physics.behavior('sweep-prune'), edgeBounce
 			]);
 
-			console.log(world);
 		}
 
 		function startWorld(world, Physics) {
 			Physics.util.ticker.on(function(time) {
+				world._bodies[0].applyForce({x: 0, y: 1});
 				world.step(time);
 			});
 		}
@@ -136,17 +136,6 @@
 				vx: 0.005,
 				radius: Math.floor(canvas.width / 20)
 			}
-			// 	name: 'convex-polygon',
-			// 	x: 150,
-			// 	y: 300,
-			// 	vertices: v(5, 90)
-			// },
-			// {
-			// 	name: 'convex-polygon',
-			// 	x: 150,
-			// 	y: 300,
-			// 	vertices: v(6, 90)
-			// }
 			];
 			for (var i = 3; i < 13; i++) {
 				bodies.push({
@@ -157,8 +146,8 @@
 					vertices: v(i, 90)
 				});
 			}
-			console.log(bodies);
 			world.add(bodies.map(makeBody.bind(Physics)));
+			
 		}
 
 		require([
