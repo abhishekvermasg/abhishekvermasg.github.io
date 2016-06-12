@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PhysicsJS/0.7.0/physicsjs-full.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
+	<title>Just Something</title>
+	<style>
+		html, body { height: 100%; margin: 0; overflow: hidden; }
+		#viewport { position: relative; background: #1d1f20; }
+	</style>
+</head>
+<body>
+	<div id="viewport"></div>
+	<script>
+		document.getElementById("viewport").style.height = window.innerHeight;
+		require.config({
+			baseUrl: 'http://wellcaffeinated.net/PhysicsJS/assets/scripts/vendor/',
+			packages: [{
+				name: 'physicsjs',
+				location: 'physicsjs-current',
+				main: 'physicsjs-full.min'
+			}]
+		});
+
+		var colors = [
+			['0x268bd2', '0x0d394f'],
+			['0xc93b3b', '0x561414'],
+			['0xe25e36', '0x79231b'],
+			['0x6c71c4', '0x393f6a'],
+			['0x58c73c', '0x30641c'],
+			['0xcac34c', '0x736a2c']
+		];
+
+		function initWorld(world, Physics) {
+			var viewWidth = window.innerWidth,
+				viewHeight = window.innerHeight,
+				viewportBounds = Physics.aabb(0, 0, window.innerWidth, window.innerHeight),
+				edgeBounce, renderer, styles = {
+					'circle': {
+						fillStyle: colors[0][0],
+						lineWidth: 1,
+						strokeStyle: colors[0][1],
+						angleIndicator: colors[0][1]
+					},
+					'rectangle': {
+						fillStyle: colors[1][0],
+						lineWidth: 1,
+						strokeStyle: colors[1][1],
+						angleIndicator: colors[1][1]
+					},
+					'convex-polygon': {
+						fillStyle: colors[2][0],
+						lineWidth: 1,
+						strokeStyle: colors[2][1],
+						angleIndicator: colors[2][1]
+					}
+				};
+
+			renderer = Physics.renderer('pixi', {
+				el: 'viewport',
+				styles: styles
+			});
+			world.add(renderer);
+			world.on('step', function() {
+				world.render();
+			});
+
+			edgeBounce = Physics.behavior('edge-collision-detection', {
+				aabb: viewportBounds
+			});
+
+			window.addEventListener('resize', function() {
+				viewportBounds = Physics.aabb(0, 0, renderer.width, renderer.height);
+				edgeBounce.setAABB(viewportBounds);
+			}, true);
+
+			world.add([
+				Physics.behavior('body-impulse-response'), Physics.behavior('body-collision-detection'), Physics.behavior('sweep-prune'), edgeBounce
+			]);
+
+			console.log(world);
+		}
+
+		function startWorld(world, Physics) {
+			Physics.util.ticker.on(function(time) {
+				world.step(time);
+			});
+		}
+
+		function addInteraction(world, Physics) {
+			world.add(Physics.behavior('interactive', {
+				el: world.renderer().container
+			}));
+			var attractor = Physics.behavior('attractor', {
+				order: 0,
+				strength: 0.0001
+			});
+
+			world.on({
+				'interact:poke': function(pos) {
+					world.wakeUpAll();
+					attractor.position(pos);
+					world.add(attractor);
+				},
+				'interact:move': function(pos) {
+					attractor.position(pos);
+				},
+				'interact:release': function() {
+					world.wakeUpAll();
+					world.remove(attractor);
+				}
+			});
+		}
+
+		function makeBody(obj) {
+			return this.body(obj.name, obj);
+		}
+
+		var canvas = {
+			height: window.innerHeight,
+			width: window.innerWidth
+		};
+
+		function getRandomArbitrary(min, max) {
+    		return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+
+		function addBodies(world, Physics) {
+			var v = Physics.geometry.regularPolygonVertices;
+			var bodies = [{
+				name: 'circle',
+				x: Math.floor(canvas.width / 2 - (canvas.width / 50)),
+				y: Math.floor(canvas.height / 2),
+				vy: 0.002,
+				vx: 0.005,
+				radius: Math.floor(canvas.width / 20)
+			}
+			// 	name: 'convex-polygon',
+			// 	x: 150,
+			// 	y: 300,
+			// 	vertices: v(5, 90)
+			// },
+			// {
+			// 	name: 'convex-polygon',
+			// 	x: 150,
+			// 	y: 300,
+			// 	vertices: v(6, 90)
+			// }
+			];
+			for (var i = 3; i < 13; i++) {
+				bodies.push({
+					name: 'convex-polygon',
+					x: 150,
+					y: 300,
+					vx:2,
+					vertices: v(i, 90)
+				});
+			}
+			console.log(bodies);
+			world.add(bodies.map(makeBody.bind(Physics)));
+		}
+
+		require([
+			'physicsjs',
+			'pixi'
+		], function(Physics, PIXI) {
+			window.PIXI = PIXI;
+
+			var worldConfig = {
+				timestep: 6,
+				maxIPF: 4,
+				integrator: 'verlet',
+				sleepDisabled: false,
+				sleepSpeedLimit: 0.1,
+				sleepVarianceLimit: 2,
+				sleepTimeLimit: 500
+			};
+
+			Physics(worldConfig, [
+				initWorld,
+				addInteraction,
+				addBodies,
+				startWorld
+			]);
+
+		});
+	</script>
+</body>
+</html>
