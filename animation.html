@@ -39,6 +39,12 @@
 			-moz-transform3d: translate(0,0,0);
 			transform3d: translate(0,0,0);
 		}
+		.notransition {
+		  	-webkit-animation: none !important;
+		  	-moz-animation: none !important;
+		  	-o-animation: none !important;
+		  	animation: none !important;
+		}
 	</style>
 	<title>Just Something</title>
 </head>
@@ -154,7 +160,8 @@
 				if (circles[i].ypos > 0) all_zero = 0;
 			}
 			if (all_zero) {
-				$("#canvas").removeClass('example');
+				
+				$("#canvas").addClass('notransition');
 				ctx.font = "bold 30px Arial";
 				var msg = "Animation ended. Refresh to restart the animation.";
 				ctx.textAlign = "start";
