@@ -39,7 +39,7 @@
 			-moz-transform3d: translate(0,0,0);
 			transform3d: translate(0,0,0);
 		}
-		.notransition {
+		.noanimation {
 		  	-webkit-animation: none !important;
 		  	-moz-animation: none !important;
 		  	-o-animation: none !important;
@@ -140,7 +140,6 @@
 			for (var i = 0, j = keyframeString.length; i < j; i ++) {
 	  			keyframes.deleteRule(keyframeString[i]);
 			}
-			console.log(keyframes.cssRules.length);
 			var col = getRandomColor();
 			keyframes.appendRule("0% {background-color: rgba("+col.r+","+col.g+","+col.b+","+col.a+");}");
 			col = getRandomColor();
@@ -160,8 +159,7 @@
 				if (circles[i].ypos > 0) all_zero = 0;
 			}
 			if (all_zero) {
-				
-				$("#canvas").addClass('notransition');
+				$("#canvas").addClass('noanimation');
 				ctx.font = "bold 30px Arial";
 				var msg = "Animation ended. Refresh to restart the animation.";
 				ctx.textAlign = "start";
