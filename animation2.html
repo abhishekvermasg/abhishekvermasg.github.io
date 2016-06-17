@@ -1,5 +1,6 @@
 <html>
 <head>
+	<script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.4.4/randomColor.js"></script>
 	<style>
 		* {
@@ -38,6 +39,12 @@
 			-webkit-transform3d: translate(0,0,0);
 			-moz-transform3d: translate(0,0,0);
 			transform3d: translate(0,0,0);
+		}
+		.noanimation {
+		  	-webkit-animation: none !important;
+		  	-moz-animation: none !important;
+		  	-o-animation: none !important;
+		  	animation: none !important;
 		}
 	</style>
 	<title>Just Something</title>
@@ -110,7 +117,6 @@
 			for (var i = 0, j = keyframeString.length; i < j; i ++) {
 	  			keyframes.deleteRule(keyframeString[i]);
 			}
-			// console.log(keyframes.cssRules.length);
 			keyframes.appendRule("0% {background-color: "+randomColor({format: 'rgba'})+"}");
 			keyframes.appendRule("25% {background-color: "+randomColor({format: 'rgba'})+"}");
 			keyframes.appendRule("50% {background-color: "+randomColor({format: 'rgba'})+"}");
@@ -126,7 +132,7 @@
 				if (circles[i].ypos > 0) all_zero = 0;
 			}
 			if (all_zero) {
-				clearInterval(time);
+				$("#canvas").addClass('noanimation');
 				var keyframes = findKeyframesRule('example');
 				var keyframeString = [];  
 				for(var i = 0; i < keyframes.cssRules.length; i++) {
@@ -135,7 +141,6 @@
 				for (var i = 0, j = keyframeString.length; i < j; i ++) {
 		  			keyframes.deleteRule(keyframeString[i]);
 				}
-				console.log('hike');
 				ctx.font = "bold 30px Arial";
 				var msg = "Animation ended. Refresh to restart the animation.";
 				ctx.textAlign = "start";
@@ -144,8 +149,29 @@
 				ctx.fillText(msg,150,50);
 			}
 		}
-		setInterval(init, 1);
-		var time = setInterval(changeBackground, 10000);
+		window.requestAnimFrame = (function(){
+		  return  window.requestAnimationFrame || 
+		    window.webkitRequestAnimationFrame || 
+		    window.mozRequestAnimationFrame    || 
+		    window.oRequestAnimationFrame      || 
+		    window.msRequestAnimationFrame     ||  
+		    function( callback ){
+		    window.setTimeout(callback, 1000 / 60);
+		  };
+		})();
+		function animloop() {
+		  	if (typeof animloop.counter === 'undefined') {
+				animloop.counter = 0;
+			}
+			animloop.counter++;
+			if (animloop.counter > 300) {
+				changeBackground();
+				animloop.counter = 0;
+			}
+			init();
+			desmons = requestAnimFrame(animloop);
+		}
+		animloop();
 	</script> 
 </body>
 </html>
