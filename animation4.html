@@ -38,6 +38,12 @@
 			-moz-transform3d: translate(0,0,0);
 			transform3d: translate(0,0,0);
 		}
+		.noanimation {
+		  	-webkit-animation: none !important;
+		  	-moz-animation: none !important;
+		  	-o-animation: none !important;
+		  	animation: none !important;
+		}
 	</style>
 	<title>Just Something</title>
 </head>
@@ -223,16 +229,7 @@
 
 			if (init.counter > Math.floor((25 * canvas.height) / 70)) {
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
-				clearInterval(time);
-				clearInterval(setter);
-				var keyframes = findKeyframesRule('example');
-				var keyframeString = [];  
-				for(var i = 0; i < keyframes.cssRules.length; i++) {
-				  keyframeString.push(keyframes[i].keyText); 
-				}
-				for (var i = 0, j = keyframeString.length; i < j; i ++) {
-		  			keyframes.deleteRule(keyframeString[i]);
-				}
+				$('#canvas').addClass('noanimation');
 				ctx.font = "bold 30px Arial";
 				var msg = "Animation ended. Refresh to restart the animation.";
 				ctx.textAlign = "start";
@@ -242,10 +239,29 @@
 			}
 			++init.counter;
 		}
-
-		var setter = setInterval(init, 90);
-		var time = setInterval(changeBackground, 10000);
-	
+		window.requestAnimFrame = (function(){
+		  	return  window.requestAnimationFrame || 
+			    window.webkitRequestAnimationFrame || 
+			    window.mozRequestAnimationFrame    || 
+			    window.oRequestAnimationFrame      || 
+			    window.msRequestAnimationFrame     ||  
+			    function( callback ){
+			    window.setTimeout(callback, 1000 / 60);
+		  	};
+		})();
+		function animloop() {
+		  	if (typeof animloop.counter === 'undefined') {
+				animloop.counter = 0;
+			}
+			animloop.counter++;
+			if (animloop.counter > 300) {
+				changeBackground();
+				animloop.counter = 0;
+			}
+			init();
+			desmons = requestAnimFrame(animloop);
+		}
+		animloop();
 	</script> 
 </body>
 </html>
