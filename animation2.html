@@ -133,14 +133,6 @@
 			}
 			if (all_zero) {
 				$("#canvas").addClass('noanimation');
-				var keyframes = findKeyframesRule('example');
-				var keyframeString = [];  
-				for(var i = 0; i < keyframes.cssRules.length; i++) {
-				  keyframeString.push(keyframes[i].keyText); 
-				}
-				for (var i = 0, j = keyframeString.length; i < j; i ++) {
-		  			keyframes.deleteRule(keyframeString[i]);
-				}
 				ctx.font = "bold 30px Arial";
 				var msg = "Animation ended. Refresh to restart the animation.";
 				ctx.textAlign = "start";
