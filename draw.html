@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			background: black;
+			overflow: hidden
+		}
+		#canvas {
+			animation: example 10s ease-in-out infinite alternate;
+			-webkit-transform3d: translate(0,0,0);
+			-moz-transform3d: translate(0,0,0);
+			transform3d: translate(0,0,0);
+		}
+	</style>
+	<title>Just Something</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script>
+		
+		var c = document.getElementById("canvas");
+		canvas.height = window.innerHeight;
+		canvas.width = window.innerWidth;
+		var ctx = c.getContext("2d");
+		canvas.addEventListener("mousedown", handleMouse, false);
+		
+		ctx.strokeStyle = 'white';
+		ctx.lineCap="round";	
+		ctx.lineJoin="bevel";
+		ctx.shadowBlur = 3;
+		ctx.shadowColor="white";
+		
+		ctx.font = "bold 30px Arial";
+		var msg = "Draw by clicking";
+		ctx.textAlign = "start";
+		ctx.textBaseline = "bottom";
+		ctx.fillStyle = "white"; 
+		ctx.fillText(msg, 15, 45);
+
+		
+		function handleMouse(event) {
+			if (typeof counter === 'undefined') {
+				counter = 0;
+			}
+			var x = event.pageX;
+			var y = event.pageY;
+			if (!counter) ctx.moveTo(x, y);
+			else {
+				ctx.lineTo(x, y);
+				ctx.stroke();
+			}
+			ctx.beginPath();
+			ctx.arc(x, y, 2, 0, 2 * Math.PI);
+			ctx.fillStyle = 'white';
+			ctx.fill();
+			counter++;
+		}
+
+
+	</script>
+</body>
+</html>
